@@ -8,44 +8,44 @@ namespace Day1Homework_TDD
 {
     public class GroupSum
     {
-        public static List<int> getSumByGroup(List<IProductInfo> enumrableObj, int groupNum, string field)
+        public static List<int> getSumByGroup(List<IProductInfo> allProduct, int groupNum, string field)
         {
+            //當輸入負數groupNum, 跳出例外
             if (groupNum <= 0)            
-                throw new ArgumentOutOfRangeException("Negative number of groupNum is illegal.");            
+                throw new ArgumentOutOfRangeException("Negative number of groupNum is illegal.");
 
             List<int> results = new List<int>();
-            int decresedCount = enumrableObj.Count();
+            int decresedCount = allProduct.Count();
             int flag = 0;
-            while(decresedCount > 0)
+            while(decresedCount > 0)//當decreadCount減至<=0, 跳出迴圈
             {
                 int sum = 0;
                 
-                int i;
-                for(i = 0; i < groupNum; i++)
-                {
-                    if (flag + i >= enumrableObj.Count())
-                        break;
+                //法一: 舊做法
+                //int i;
+                //for(i = 0; i < groupNum; i++)
+                //{
+                //    if (flag + i >= allProduct.Count())
+                //        break;
+                //    IProductInfo productInfo = allProduct.ElementAt(flag + i);
+                //    sum += productInfo.getValue(field);
+                //}
 
-                    IProductInfo productInfo = enumrableObj.ElementAt(flag + i);
-                    sum += productInfo.getValue(field);
-                }
-
+                //法二: 嘗試使用Linq寫法處理
+                sum = allProduct.Skip(flag).Take(groupNum).Sum(product => product.getValue(field));
+                
                 flag += groupNum;//0 -> 3,6,9                
                 decresedCount -= groupNum;//11 -> 8,5,2
 
                 results.Add(sum);
-            }
-
-            //var sum = products.Take(take).Sum(product => product.pluck(attr));
-            //var groupSum = enumrableObj.Take(groupNum).Sum();
+            }            
 
             return results;
         }
     }
 
     public interface IProductInfo
-    {
-        //bool AddField(string fieldname);
+    {        
         int ID { get; set; }
         int Cost { get; set; }
         int Revenue { get; set; }
