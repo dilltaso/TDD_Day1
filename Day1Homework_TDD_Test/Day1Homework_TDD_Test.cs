@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Day1Homework_TDD;
 using System.Collections.Generic;
+using FluentAssertions;
 
 namespace Day1Homework_TDD_Test
 {
@@ -82,10 +83,10 @@ namespace Day1Homework_TDD_Test
             var expected = new List<int> { };
 
             //act
-            var actual = GroupSum.getSumByGroup(products, -1, "cost");
+            Action act = () => GroupSum.getSumByGroup(products, -1, "cost");
 
             //assert
-            CollectionAssert.AreEqual(expected, actual);
+            act.ShouldThrow<ArgumentOutOfRangeException>();   
         }
     }
 }
